@@ -1,0 +1,32 @@
+{
+  "name": "skelt",
+  "description": "Skelt is a simple function which let you build complex JS objects dynamically from a skeleton pattern.",
+  "version": "0.0.1",
+  "license": "MIT",
+  "authors": [
+    "Demangeon Julien <julien@marmelab.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marmelab/skelt"
+  },
+  "bugs": {
+    "url": "https://github.com/marmelab/skelt/issues"
+  },
+  "main": "lib/index.js",
+  "scripts": {
+    "prepublish": "make build"
+  },
+  "devDependencies": {
+    "babel-cli": "6.24.1",
+    "babel-core": "6.24.1",
+    "babel-eslint": "7.2.3",
+    "babel-plugin-transform-object-rest-spread": "6.23.0",
+    "babel-preset-es2015": "6.24.1",
+    "eslint": "3.19.0",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-mocha": "4.9.0",
+    "expect": "1.20.2",
+    "mocha": "2.5.3"
+  }
+}
