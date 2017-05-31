@@ -6,6 +6,7 @@ Skelt is a simple templating engine for object literals.
 
 - [Installation](#installation)
 - [Usage](#usage)
+- [Performance](#performance)
 - [Contributing](#contributing)
 
 ## Installation
@@ -129,6 +130,32 @@ skelt(homeTemplate, { locale: 'fr' });
         }
     ],
     body: 'Contenu...',
+}
+
+```
+
+## Performance
+
+Because of the full trasversal and resolving of the `template`, performance can sometime be hurted by compute intensive functions.
+
+To speed up the computing time for templating, you can use the `memoize` function of your choice into your template as below. This way, functions are called only the first time template is rendered.
+
+```js
+import skelt from 'skelt';
+import memoize from 'some-memoize-library';
+
+import fibonnaci from './some-fibonnaci-module';
+
+skelt({
+    function: 'fibonnaci',
+    result: memoize(fibonnaci),
+}, { n: 10 });
+
+// =>
+
+{
+    function: 'fibonnaci',
+    result: 55, // computed only the first time for { n: 10 }
 }
 
 ```
