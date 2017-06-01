@@ -65,7 +65,7 @@ skelt(personTemplate, { firstName: 'John', lastName: 'Doe', age: 42 });
 // {
 //    fullName: 'John Doe',
 //    age: 42,
-//    extras: {
+//    misc: {
 //        isAdult: true,
 //    },
 // }
@@ -81,7 +81,7 @@ const isAdult = ({ age }) => age > 21;
 const personTemplate = ({ age, firstName, lastName }) => ({
     fullName: `${firstName} ${lastName}`,
     age,
-    extras: {
+    misc: {
         isAdult,
     }
 });
