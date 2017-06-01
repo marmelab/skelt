@@ -2,11 +2,11 @@
 
 [![Build Status](https://travis-ci.org/marmelab/skelt.svg?branch=master)](https://travis-ci.org/marmelab/skelt)
 
-Skelt is a simple templating engine for object literals.
+Skelt is a templating engine for object literals.
 
 - [Installation](#installation)
 - [Usage](#usage)
-- [Performance](#performance)
+- [Performance](#use-memoize-to-improve-performance)
 - [Contributing](#contributing)
 
 ## Installation
@@ -25,65 +25,79 @@ yarn add skelt
 
 ## Usage
 
-For some reason, it should be necessary to build `complex JS objects` dynamically from a predefined `template`. Skelt let you achieve this task with simplicity while benefiting from `testability capabilities`.
+When you need to build *complex JS objects* dynamically from a predefined *template object*, use Skelt to benefit from *testability capabilities*.
 
-Skelt function is deadly simple, his first argument represent your `template` (array, object or function) whereas the second argument is a `parameters` object with all values required by the `template`.
+Skelt is a deadly simple function: the first argument represent your *template* object, whereas the second argument is a *parameters* object with all values required by the template.
+
+```js
+skelt = (template, parameters) => object
+```
+
+Here is the compulsory "hello, world" example:
 
 ```js
 import skelt from 'skelt';
 
 const template = {
-    hello: ({ name }) => `Hello ${name}`
+    welcome: ({ name }) => `Hello ${name}`
 };
 
 skelt(template, { name: 'world' });
-
-// =>
-
-{
-    hello: 'Hello world'
-}
-
+// {
+//    welcome: 'Hello world'
+// }
 ```
 
-At build step, your `template` will be walked and `resolved recursively`. By "resolve", it mean that all template `functions` will be called with the `parameters` object.
+At build step, the template is walked and resolved *recursively*. That means that all functions values are executed with the `parameters` object as argument. Non-function values are just passed as is.
 
 ```js
 import skelt from 'skelt';
 
-const adult = ({ age }) => age > 21;
+const personTemplate = {
+    fullName: ({firstName, lastName }) => `${firstName} ${lastName}`,
+    age: ({ age }) => age,
+    misc: {
+        isAdult: ({ age }) => age > 21,
+    }
+};
 
-const personTemplate = ({ age, lastname, firstname }) => ({
-    fullname: `${lastname} ${firstname}`,
+skelt(personTemplate, { firstName: 'John', lastName: 'Doe', age: 42 });
+// {
+//    fullName: 'John Doe',
+//    age: 42,
+//    extras: {
+//        isAdult: true,
+//    },
+// }
+```
+
+The template can also be a function returning an object, which somehow makes writing templates easier:
+
+```js
+import skelt from 'skelt';
+
+const isAdult = ({ age }) => age > 21;
+
+const personTemplate = ({ age, firstName, lastName }) => ({
+    fullName: `${firstName} ${lastName}`,
     age,
     extras: {
-        adult,
+        isAdult,
     }
 });
 
 skelt(personTemplate, { lastname: 'John', firstname: 'Doe', age: 42 });
 
-// =>
-
-{
-    fullname: 'John Doe',
-    age: 42,
-    extras: {
-        adult: true,
-    },
-}
-
+// same result as above
 ```
 
-At the end, you can create your own functions, compose them and build very complex objects from a simple template with imbricated arrays, objects or functions as the example below.
+That means you can build very complex objects from simple templates using composition, as shown in the example below.
 
 ```js
 import skelt from 'skelt';
 
-const localize = choices => (({ locale }) => choices[locale]);
-
 const url = ({ locale }) => `http://www.example.com/${locale}`;
-
+const localize = choices => ({ locale }) => choices[locale]; // higher-order function!
 const title = localize({
     fr: 'Bienvenue sur mon site',
     en: 'Welcome on my website',
@@ -92,57 +106,34 @@ const title = localize({
 const homeTemplate = {
     url,
     title,
-    alternativeLanguages: [
-        {
-            label: 'Français',
-            url: url({ locale: 'fr' }),
-            title: title({ locale: 'fr' }),
-        },
-        {
-            label: 'English',
-            url: url({ locale: 'en' }),
-            title: title({ locale: 'en' }),
-        },
-    ],
     body: localize({
-        fr: 'Contenu...',
-        de: 'Content...',
+        fr: 'Bonjour le monde',
+        de: 'Hello, world',
     }),
+    tags: localize({
+        fr: ['accueil', 'test'],
+        en: ['welcome', 'test'],
+    })
 };
 
 skelt(homeTemplate, { locale: 'fr' });
-
-// =>
-
-{
-    url: 'http://www.example.com/fr',
-    title: 'Bienvenue sur mon site',
-    alternativeLanguages: [
-        {
-            label: 'Français',
-            url: 'http://www.example.com/fr',
-            title: 'Bienvenue sur mon site',
-        },
-        {
-            label: 'English',
-            url: 'http://www.example.com/en',
-            title: 'Welcome on my website',
-        }
-    ],
-    body: 'Contenu...',
-}
-
+// {
+//    url: 'http://www.example.com/fr',
+//    title: 'Bienvenue sur mon site',
+//    body: 'Bonjour le monde',
+//    tags: ['accueil', 'test'],
+// }
 ```
 
-## Performance
+## Use Memoize To Improve Performance
 
-Because of the full trasversal and resolving of the `template`, performance can sometime be hurted by compute intensive functions.
+Because of the full traversal and resolving of the template, performance can sometimes be suboptimal.
 
-To speed up the computing time for templating, you can use the `memoize` function of your choice into your template as below. This way, functions are called only the first time template is rendered.
+To speed up the computing time for templating, you can use the `memoize` function of your choice in your template. This way, functions are only called the first time the template is rendered. Here is an example:
 
 ```js
 import skelt from 'skelt';
-import memoize from 'some-memoize-library';
+import memoize from 'lodash/memoize';
 
 import fibonnaci from './some-fibonnaci-module';
 
@@ -151,13 +142,10 @@ skelt({
     result: memoize(fibonnaci),
 }, { n: 10 });
 
-// =>
-
-{
-    function: 'fibonnaci',
-    result: 55, // computed only the first time for { n: 10 }
-}
-
+// {
+//    function: 'fibonnaci',
+//    result: 55, // computed only the first time for n = 10
+// }
 ```
 
 ## Contributing
@@ -167,3 +155,7 @@ Run the tests with this command:
 ```sh
 make test
 ```
+
+## License
+
+Skelt is licensed under the MIT Licence, sponsored and supported by marmelab.
