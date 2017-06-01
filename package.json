@@ -1,6 +1,6 @@
 {
   "name": "skelt",
-  "description": "Skelt is a simple function which let you build complex JS objects dynamically from a skeleton pattern.",
+  "description": "Templating engine for object literals",
   "version": "0.0.1",
   "license": "MIT",
   "authors": [
