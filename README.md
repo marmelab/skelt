@@ -158,4 +158,4 @@ make test
 
 ## License
 
-Skelt is licensed under the MIT Licence, sponsored and supported by marmelab.
+Skelt is licensed under the [MIT Licence](https://github.com/marmelab/skelt/blob/master/LICENSE.md), sponsored and supported by [marmelab](http://marmelab.com).
