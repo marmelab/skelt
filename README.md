@@ -158,4 +158,4 @@ make test
 
 ## License
 
-Skelt is licensed under the [MIT Licence](https://github.com/marmelab/skelt/blob/master/LICENSE.md), courtesy of [Marmelab](http://marmelab.com) and [ARTE](http://www.arte.tv/fr/).
+Skelt is licensed under the [MIT Licence](https://github.com/marmelab/skelt/blob/master/LICENSE.md), courtesy of [Marmelab](http://marmelab.com) and [ARTE](http://www.arte.tv/).
