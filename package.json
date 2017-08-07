@@ -1,7 +1,7 @@
 {
   "name": "skelt",
   "description": "Templating engine for object literals",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "authors": [
     "Demangeon Julien <julien@marmelab.com>"
@@ -26,5 +26,11 @@
     "eslint": "3.19.0",
     "eslint-plugin-import": "2.2.0",
     "jest": "^20.0.4"
-  }
+  },
+  "contributors": [
+    "Alexis Janvier <contact@alexisjanvier.net> (https://github.com/alexisjanvier)",
+    "Francois Zaninotto (https://github.com/fzaninotto)",
+    "Jonathan Petitcolas <petitcolas.jonathan@gmail.com> (https://github.com/jpetitcolas)",
+    "Julien Demangeon <julien@marmelab.com> (https://github.com/jdemangeon)"
+  ]
 }
