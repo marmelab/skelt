@@ -70,4 +70,9 @@ describe('Skelt', () => {
             ],
         });
     });
+
+    it('should handle `null` value correctly', () => {
+        const filledSkeleton = skelt({ parent: null }, {});
+        expect(filledSkeleton).toEqual({ parent: null });
+    });
 });
