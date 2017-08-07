@@ -17,3 +17,5 @@ cache:
 
 install:
     - "make --silent install"
+
+script: "make test"

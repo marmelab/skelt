@@ -16,12 +16,7 @@ build: clean ## Compile ES6 files to JS
 		./src
 
 test: ## Launch unit tests
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--opts ./mocha.opts \
-		"./src/**/*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/jest
 
 test-watch: ## Launch unit tests
-	@NODE_ENV=test ./node_modules/.bin/mocha \
-		--opts ./mocha.opts \
-		--watch \
-		"./src/**/*.spec.js"
+	@NODE_ENV=test ./node_modules/.bin/jest --watch

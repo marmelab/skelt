@@ -1,4 +1,3 @@
-import expect from 'expect';
 import skelt from './index';
 
 describe('Skelt', () => {
